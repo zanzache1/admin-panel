@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم موقع مفتشية التعليم الابتدائي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Cairo', sans-serif;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .admin-header {
+            background-color: #2E8B57;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+        .admin-card {
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .admin-card-header {
+            background-color: #2E8B57;
+            color: white;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-admin {
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-upload {
+            background-color: #F59E0B;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-send {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-upload {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+        .file-upload:hover {
+            border-color: #F59E0B;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        .file-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .file-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container admin-container">
+        <div class="admin-header">
+            <h2>لوحة تحكم موقع مفتشية التعليم الابتدائي</h2>
+        </div>
+
+        <!-- تعديل الروابط -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <i class="fas fa-link"></i>
+                        <h4>تعديل الروابط</h4>
+                    </div>
+                    <div class="form-group">
+                        <label for="link1">منصة الإسناد التربوي:</label>
+                        <input type="text" class="form-control" id="link1" value="https://zanzache1.github.io/isnaadtarbaoui/" placeholder="الروابط">
+                    </div>
+                    <div class="form-group">
+                        <label for="link2">منصة التأطير التربوي:</label>
+                        <input type="text" class="form-control" id="link2" value="https://med27771.github.io/zanzache1/" placeholder="الروابط">
+                    </div>
+                    <div class="form-group">
+                        <label for="link3">منصة الترقية:</label>
+                        <input type="text" class="form-control" id="link3" value="https://zanzache1.github.io/tarkia/" placeholder="الروابط">
+                    </div>
+                    <div class="form-group">
+                        <label for="link4">امتحان الترسيم:</label>
+                        <input type="text" class="form-control" id="link4" value="https://zanzache1.github.io/tarssim/" placeholder="الروابط">
+                    </div>
+                    <button class="btn btn-admin mt-3" onclick="saveLinks()">حفظ التغييرات</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <i class="fas fa-image"></i>
+                        <h4>رفع صور المعرض</h4>
+                    </div>
+                    <div class="file-upload" onclick="document.getElementById('galleryImage').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>قم بتحميل صورة المعرض</p>
+                    </div>
+                    <input type="file" id="galleryImage" accept="image/*" style="display: none;">
+                    <button class="btn btn-upload mt-3" onclick="uploadImage()">رفع الصورة</button>
+                    <div id="imagePreview"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- مراسلة الأعضاء -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <i class="fas fa-envelope"></i>
+                        <h4>مراسلة الأعضاء</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipientSelect">اختر عضو:</label>
+                                <select class="form-select" id="recipientSelect">
+                                    <option value="">اختر عضو</option>
+                                    <option value="member1">مستخدم 1</option>
+                                    <option value="member2">مستخدم 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="messageSubject">الموضوع:</label>
+                                <input type="text" class="form-control" id="messageSubject" placeholder="موضوع الرسالة">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageBody">نص الرسالة:</label>
+                        <textarea class="form-control" id="messageBody" rows="3" placeholder="اكتب نص الرسالة هنا"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>إرفاق ملف:</label>
+                        <div class="file-upload" onclick="document.getElementById('fileUpload').click()">
+                            <i class="fas fa-file-upload"></i>
+                            <p>قم بتحميل ملف</p>
+                        </div>
+                        <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.xlsx,.jpg,.jpeg,.png" style="display: none;">
+                        <div id="filePreview"></div>
+                    </div>
+                    <button class="btn btn-send mt-3" onclick="sendMessage()">إرسال الرسالة</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرسائل والاقتراحات -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <i class="fas fa-comment"></i>
+                        <h4>الرسائل والاقتراحات</h4>
+                    </div>
+                    <div class="message-list" id="messagesContainer"></div>
+                    <button class="btn btn-admin mt-3" onclick="loadMessages()">تحديث الرسائل</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <i class="fas fa-users"></i>
+                        <h4>الأعضاء المنضمين</h4>
+                    </div>
+                    <div class="member-list" id="membersContainer"></div>
+                    <button class="btn btn-admin mt-3" onclick="loadMembers()">تحديث الأعضاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messages = [
+            { id: 1, name: "مستخدم 1", email: "user1@example.com", message: "مرحبا! كيف حالك؟", type: "contact", date: "2026-11-06" },
+            { id: 2, name: "مستخدم 2", email: "user2@example.com", message: "اقتراح جديد", type: "suggestion", date: "2026-11-05" }
+        ];
+
+        let members = [
+            { id: 1, name: "مستخدم 1", email: "user1@example.com", joined: "2026-11-01" },
+            { id: 2, name: "مستخدم 2", email: "user2@example.com", joined: "2026-11-02" }
+        ];
+
+        function saveLinks() {
+            const link1 = document.getElementById('link1').value;
+            const link2 = document.getElementById('link2').value;
+            const link3 = document.getElementById('link3').value;
+            const link4 = document.getElementById('link4').value;
+            alert("تم حفظ الروابط بنجاح!");
+            console.log("روابط جديدة:", { link1, link2, link3, link4 });
+        }
+
+        function uploadImage() {
+            const fileInput = document.getElementById('galleryImage');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgUrl = e.target.result;
+                    const preview = document.createElement('div');
+                    preview.className = 'file-preview-item';
+                    preview.innerHTML = `<i class="fas fa-image text-amber-500"></i><span>${file.name}</span>`;
+                    document.getElementById('imagePreview').appendChild(preview);
+                    alert("تم رفع الصورة بنجاح!");
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert("يرجى اختيار صورة أولا!");
+            }
+        }
+
+        function loadMessages() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'card mb-2';
+                messageElement.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${message.name}</h5>
+                        <p class="card-text">${message.message}</p>
+                        <p class="card-text"><small class="text-muted">${message.email}</small></p>
+                        <p class="card-text"><small class="text-muted">${message.type === 'contact' ? 'اتصال' : 'اقتراح'}</small></p>
+                        <p class="card-text"><small class="text-muted">${message.date}</small></p>
+                    </div>
+                `;
+                container.appendChild(messageElement);
+            });
+        }
+
+        function loadMembers() {
+            const container = document.getElementById('membersContainer');
+            container.innerHTML = '';
+            members.forEach(member => {
+                const memberElement = document.createElement('div');
+                memberElement.className = 'card mb-2';
+                memberElement.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${member.name}</h5>
+                        <p class="card-text"><small class="text-muted">${member.email}</small></p>
+                        <p class="card-text"><small class="text-muted">تاريخ الانضمام: ${member.joined}</small></p>
+                    </div>
+                `;
+                container.appendChild(memberElement);
+            });
+        }
+
+        function sendMessage() {
+            const recipient = document.getElementById('recipientSelect').value;
+            const subject = document.getElementById('messageSubject').value;
+            const body = document.getElementById('messageBody').value;
+            const fileInput = document.getElementById('fileUpload');
+
+            if (!recipient || !subject || !body) {
+                alert("يرجى ملء جميع الحقول!");
+                return;
+            }
+
+            const newMessage = {
+                id: messages.length + 1,
+                name: recipient === "member1" ? "مستخدم 1" : "مستخدم 2",
+                email: recipient === "member1" ? "user1@example.com" : "user2@example.com",
+                message: body,
+                type: "sent",
+                subject: subject,
+                date: new Date().toLocaleDateString()
+            };
+
+            messages.push(newMessage);
+            alert(`تم إرسال الرسالة إلى ${recipient === "member1" ? "مستخدم 1" : "مستخدم 2"} بنجاح!`);
+            loadMessages();
+            document.getElementById('messageSubject').value = "";
+            document.getElementById('messageBody').value = "";
+            document.getElementById('fileUpload').value = "";
+            document.getElementById('filePreview').innerHTML = "";
+        }
+
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const preview = document.getElementById('filePreview');
+            preview.innerHTML = "";
+            if (this.files.length > 0) {
+                for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    const fileType = file.name.split('.').pop().toLowerCase();
+                    const icon = fileType === 'pdf' ? 'fa-file-pdf' :
+                                 fileType === 'doc' || fileType === 'docx' ? 'fa-file-word' :
+                                 fileType === 'xlsx' ? 'fa-file-excel' : 'fa-file-image';
+
+                    const filePreviewItem = document.createElement('div');
+                    filePreviewItem.className = 'file-preview-item';
+                    filePreviewItem.innerHTML = `
+                        <i class="${icon} text-blue-500"></i>
+                        <span>${file.name}</span>
+                    `;
+                    preview.appendChild(filePreviewItem);
+                }
+            }
+        });
+
+        loadMessages();
+        loadMembers();
+    </script>
+</body>
+</html>
